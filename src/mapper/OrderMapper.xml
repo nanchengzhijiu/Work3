@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.OrderMapper">
+    <insert id="insertOrder">
+        insert into orders (order_number,price,order_time)
+        values (#{orderNumber},#{price},Now())
+    </insert>
+    <delete id="deleteOrderByOrderNumber">
+        delete from orders where order_number=#{orderNumber}
+    </delete>
+    <update id="updateOrder">
+        update orders
+        <set>
+            price=#{price},
+            order_time=Now()
+        </set>
+        where order_number=#{orderNumber}
+    </update>
+    <select id="selectAllOrder" resultType="Order">
+        select * from orders
+    </select>
+    <select id="selectByOrderNumber" resultType="Order">
+        select * from orders where order_number=#{orderNumber};
+    </select>
+</mapper>

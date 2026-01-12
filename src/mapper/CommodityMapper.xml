@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.CommodityMapper">
+    <insert id="insertCommodity">
+        insert into commodity(commodity_number, name, price) values (#{commodityNumber},#{name},#{price})
+    </insert>
+    <delete id="deleteCommodityByNumber">
+        delete from commodity where commodity_number=#{commodityNumber}
+    </delete>
+    <update id="updateCommodity">
+        update commodity
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+        </set>
+        where commodity_number = #{commodityNumber}
+    </update>
+    <select id="selectAllCommodity" resultType="Commodity">
+        select * from commodity
+    </select>
+    <select id="selectCommodityPriceByNumber" resultType="double">
+        select price from commodity where commodity_number=#{commodityNumber}
+    </select>
+</mapper>

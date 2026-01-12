@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.OrderItemMapper">
+    <insert id="insertOrderItem">
+        insert into order_item (order_number,commodity_number,number,total_price)
+        values (#{orderNumber},#{commodityNumber},#{number},#{totalPrice})
+    </insert>
+    <delete id="deleteOrderItemByNumber">
+        delete from order_item where order_number=#{orderNumber} and commodity_number=#{commodityNumber}
+    </delete>
+    <update id="updateOrderItem">
+        update order_item
+        <set>
+            <if test="number!=null">
+                number=#{number},
+            </if>
+            <if test="totalPrice!=null">
+                total_price=#{totalPrice}
+            </if>
+        </set>
+        where order_number=#{orderNumber} and commodity_number=#{commodityNumber}
+    </update>
+    <select id="selectAllItem" resultType="OrderItem">
+        select * from order_item
+    </select>
+    <select id="selectItemByNumber" resultType="OrderItem">
+        select * from order_item where order_number=#{orderNumber} and commodity_number=#{commodityNumber}
+    </select>
+</mapper>
