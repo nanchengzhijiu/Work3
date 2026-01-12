@@ -1,10 +1,8 @@
 package View;
 
 import Server.CommodityServer;
-import Util.MybatisUtils;
 import entity.Commodity;
 import lombok.Data;
-import org.apache.ibatis.session.SqlSession;
 
 import java.util.Scanner;
 @Data
@@ -32,7 +30,7 @@ public class CommodityView {
             commodityPrice=scanner.nextDouble();
         } catch (Exception e) {
             System.out.println("输入数据有误，返回上一级操作");
-            scanner.next();
+            return;
         }
 
         boolean isInsert= commodityServer.insertCommodity(
