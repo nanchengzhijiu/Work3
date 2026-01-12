@@ -31,7 +31,7 @@ public class OrderView {
         //订单编号输入
         do {
             System.out.println("请输入订单编号(必填)：");
-            orderNumber = scanner.nextLine();
+            orderNumber = scanner.next();
         } while (orderNumber.isEmpty());
     }
 //    输入订单项信息
@@ -145,7 +145,7 @@ public class OrderView {
         System.out.println("请输入想要更新的数量");
         String number=scanner.next();
 //        通过商品和订单编号获取唯一的商品项目
-        OrderItem orderItem=orderItemServer.getOrderItemByNumber(commodityNumber,orderNumber);
+        OrderItem orderItem=orderItemServer.getOrderItemByNumber(orderNumber,commodityNumber);
 //        商品项不存在
         if(orderItem==null){
             System.out.println("商品项不存在");
