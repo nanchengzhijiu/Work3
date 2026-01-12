@@ -47,7 +47,22 @@ public class CommodityView {
 
     }
     private void getCommodityView(){
-        commodityServer.getCommodity().forEach(commodity->{
+        int page;
+        do {
+            clearScan();
+            System.out.println("请输入你要查询的页码：");
+            try {
+                page=scanner.nextInt();
+                if (page<=0) {
+                    System.out.println("请输入正确的页码");
+                    continue;
+                }
+                break;
+            }catch (Exception e){
+                System.out.println("输入页码格式错误");
+            }
+        }while(true);
+        commodityServer.getCommodityByPage(page).forEach(commodity->{
             System.out.println(
                     "商品编号:"+commodity.getCommodityNumber()+
                             " 商品名："+commodity.getName()+

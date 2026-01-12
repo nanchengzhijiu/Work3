@@ -38,9 +38,13 @@ public class CommodityServer {
         int result=commodityMapper.updateCommodity(commodity);
         return result>0;
     }
-    public List<Commodity> getCommodity(){
-        List<Commodity> commodities=commodityMapper.selectAllCommodity();
-        System.out.println("成功查询到商品,共"+commodities.size()+"个商品");
+    public List<Commodity> getCommodityByPage(int page){
+        List<Commodity> commodities=commodityMapper.selectCommodityByPage(5,(page-1)*5);
+        if (!commodities.isEmpty()){
+            System.out.println("成功查询到商品,共"+commodities.size()+"个商品");
+        }else {
+            System.out.println("超出页码范围");
+        }
         return commodities;
     }
     public double getCommodityPriceByNumber(String commodityNumber){

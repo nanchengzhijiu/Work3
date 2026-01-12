@@ -21,8 +21,8 @@
         </set>
         where commodity_number = #{commodityNumber}
     </update>
-    <select id="selectAllCommodity" resultType="Commodity">
-        select * from commodity
+    <select id="selectCommodityByPage" resultType="Commodity">
+        select * from commodity Limit #{pageNumber} Offset #{offect}
     </select>
     <select id="selectCommodityPriceByNumber" resultType="double">
         select price from commodity where commodity_number=#{commodityNumber}

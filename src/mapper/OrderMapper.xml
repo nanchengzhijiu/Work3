@@ -18,8 +18,8 @@
         </set>
         where order_number=#{orderNumber}
     </update>
-    <select id="selectAllOrder" resultType="Order">
-        select * from orders
+    <select id="selectOrderByPage" resultType="Order">
+        select * from orders Limit #{pageNumber} Offset #{offect}
     </select>
     <select id="selectByOrderNumber" resultType="Order">
         select * from orders where order_number=#{orderNumber};

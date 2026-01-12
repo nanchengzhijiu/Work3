@@ -4,7 +4,6 @@ import Server.OrderItemServer;
 import Server.OrderServer;
 import entity.Order;
 import entity.OrderItem;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +94,22 @@ public class OrderView {
         insertOrder();
     }
     private void getAllOrderView(){
-        orderServer.getOrder().forEach(o->{
+        int page;
+        do {
+            clearScan();
+            System.out.println("请输入你要查询的页码：");
+            try {
+                page=scanner.nextInt();
+                if (page<=0) {
+                    System.out.println("请输入正确的页码");
+                    continue;
+                }
+                break;
+            }catch (Exception e){
+                System.out.println("输入页码格式错误");
+            }
+        }while(true);
+        orderServer.getOrderByPage(page).forEach(o->{
             System.out.println(
                     "订单号"+o.getOrderNumber()+
                             " 价格："+o.getPrice()+

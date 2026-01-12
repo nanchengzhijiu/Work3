@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface OrderMapper {
     int insertOrder(Order order);
-    int updateOrder(Order order);
+    void updateOrder(Order order);
     int deleteOrderByOrderNumber(@Param("orderNumber") String orderNumber);
-    List<Order> selectAllOrder();
+    List<Order> selectOrderByPage(@Param("pageNumber") int pageNumber,@Param("offect") int offect);
     Order selectByOrderNumber(@Param("orderNumber") String orderNumber);
 }

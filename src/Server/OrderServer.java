@@ -2,7 +2,6 @@ package Server;
 
 import Util.MybatisUtils;
 import entity.Order;
-import entity.OrderItem;
 import mapper.OrderMapper;
 import org.apache.ibatis.session.SqlSession;
 
@@ -30,9 +29,13 @@ public class OrderServer {
         orderMapper.updateOrder(order);
         System.out.println("成功更新订单");
     }
-    public List<Order> getOrder(){
-        List<Order> orders=orderMapper.selectAllOrder();
-        System.out.println("成功查询到订单,共"+orders.size()+"个订单");
+    public List<Order> getOrderByPage(int page){
+        List<Order> orders=orderMapper.selectOrderByPage(5,(page-1)*5);
+        if (!orders.isEmpty()){
+            System.out.println("成功查询到商品,共"+orders.size()+"个商品");
+        }else {
+            System.out.println("超出页码范围");
+        }
         return orders;
     }
     public Order getOrderByNumber(String orderNumber){
