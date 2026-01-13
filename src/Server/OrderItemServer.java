@@ -1,11 +1,9 @@
 package Server;
 
 import Util.MybatisUtils;
-import entity.OrderItem;
+import pojo.OrderItem;
 import mapper.OrderItemMapper;
 import org.apache.ibatis.session.SqlSession;
-
-import java.util.List;
 
 public class OrderItemServer {
     private SqlSession session= MybatisUtils.getSqlSession(true);

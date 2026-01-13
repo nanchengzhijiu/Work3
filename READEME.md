@@ -32,12 +32,12 @@ ${}为直接拼接、#{}经过预编译的语句
 ```
 //自动命名返回类型entity下包的类
 <typeAliases>
-    <package name="entity"/>
+    <package name="pojo"/>
 </typeAliases>
 
 <typeAliases>
-    <typeAlias type="entity.Order" alias="Order"/>
-    <typeAlias type="entity.Commodity" alias="Commodity"/>
+    <typeAlias type="pojo.Order" alias="Order"/>
+    <typeAlias type="pojo.Commodity" alias="Commodity"/>
 </typeAliases>
 ```
 
@@ -90,12 +90,13 @@ resultType可以返回hashmap形式返回
 ```java
 package Interface;
 
-import entity.Order;
+import pojo.Order;
 
 import java.util.List;
 
 public interface TestMapper {
     List<Order> selectAllOrder();
+
     Order selectOrderById(int id);
 }
 ```
@@ -124,11 +125,11 @@ User selectUserByIdAndAge(@Param("id") int id, @Param("age") int age);
 一对一、多对一
 
 ```
-<resultMap id="test" type="com.test.entity.User">
+<resultMap id="test" type="com.test.pojo.User">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="age" column="age"/>
-    <association property="detail" column="id" javaType="com.test.entity.UserDetail">
+    <association property="detail" column="id" javaType="com.test.pojo.UserDetail">
         <id property="id" column="id"/>
         <result property="description" column="description"/>
         <result property="register" column="register"/>
@@ -143,14 +144,14 @@ User selectUserByIdAndAge(@Param("id") int id, @Param("age") int age);
 <select id="selectUserById" resultMap="test">
     select * from user where id = #{id}
 </select>
-<resultMap id="test" type="com.test.entity.User">
+<resultMap id="test" type="com.test.pojo.User">
     <id property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="age" column="age"/>
-    <association property="detail" column="id" select="selectUserDetailById" javaType="com.test.entity.UserDetail"/>
+    <association property="detail" column="id" select="selectUserDetailById" javaType="com.test.pojo.UserDetail"/>
 </resultMap>
 
-<select id="selectUserDetailById" resultType="com.test.entity.UserDetail">
+<select id="selectUserDetailById" resultType="com.test.pojo.UserDetail">
     select * from user_detail where id = #{id}
 </select>
 ```
@@ -158,11 +159,11 @@ User selectUserByIdAndAge(@Param("id") int id, @Param("age") int age);
 一对多
 
 ```
-<resultMap id="test" type="com.test.entity.User">
+<resultMap id="test" type="com.test.pojo.User">
     <id column="id" property="id"/>
     <result column="name" property="name"/>
     <result column="age" property="age"/>
-    <collection property="books" ofType="com.test.entity.Book">
+    <collection property="books" ofType="com.test.pojo.Book">
         <id column="bid" property="bid"/>
         <result column="title" property="title"/>
     </collection>
@@ -239,3 +240,5 @@ order_item也通过外键与商品表关联，同时设置为**RESTRICT**，以�
 在更新商品价格是，订单对应的价格本人并未更新，应为本人觉得不能因为后续价格的改变而更改先前订单的价格，这不合理，
 
 同时，在更新商品项的数目是，价格是按下单时的版本进行计算的
+
+在删除已经存在在订单中的商品时，同时计算删除的商品的总价值，然后重新计算订单总价格，并分别更新

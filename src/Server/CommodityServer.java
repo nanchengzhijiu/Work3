@@ -1,7 +1,7 @@
 package Server;
 
 import Util.MybatisUtils;
-import entity.Commodity;
+import pojo.Commodity;
 import mapper.CommodityMapper;
 import org.apache.ibatis.session.SqlSession;
 

@@ -1,7 +1,7 @@
 package View;
 
 import Server.CommodityServer;
-import entity.Commodity;
+import pojo.Commodity;
 import lombok.Data;
 
 import java.util.Scanner;

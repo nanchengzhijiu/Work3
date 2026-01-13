@@ -1,6 +1,6 @@
 package mapper;
 
-import entity.Commodity;
+import pojo.Commodity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

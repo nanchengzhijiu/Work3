@@ -1,7 +1,7 @@
 package Server;
 
 import Util.MybatisUtils;
-import entity.Order;
+import pojo.Order;
 import mapper.OrderMapper;
 import org.apache.ibatis.session.SqlSession;
 

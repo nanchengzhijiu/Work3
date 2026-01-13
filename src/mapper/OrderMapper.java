@@ -1,6 +1,6 @@
 package mapper;
 
-import entity.Order;
+import pojo.Order;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
