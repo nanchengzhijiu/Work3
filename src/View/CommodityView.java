@@ -94,6 +94,7 @@ public class CommodityView {
         String priceInput = scanner.nextLine();
 
         if (!priceInput.isEmpty()) {
+            commodityPrice=Double.parseDouble(priceInput);
             try {
                 if (commodityPrice < 0) {
                     System.out.println("价格不能为负数，将跳过价格更新");
