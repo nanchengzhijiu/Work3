@@ -2,6 +2,8 @@ package View;
 import Server.CommodityServer;
 import Server.OrderItemServer;
 import Server.OrderServer;
+import Util.MybatisUtils;
+import org.apache.ibatis.session.SqlSession;
 import pojo.Order;
 import pojo.OrderItem;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +40,7 @@ public class OrderView {
         clearScan();
         String orderInfo;
         String[] info;
+        SqlSession session=MybatisUtils.getSqlSession(true);
         orderItemList.clear();
         orderPrice=0.0;
         //        输入订单商品
@@ -53,7 +56,7 @@ public class OrderView {
                     continue;
                 }
 //              该商品的总金额
-                double totalPrice=commodityServer.getCommodityPriceByNumber(info[0])*Double.parseDouble(info[1]);
+                double totalPrice=commodityServer.getCommodityPriceByNumber(info[0],session)*Double.parseDouble(info[1]);
                 if (totalPrice<0){
                     continue;
                 }
@@ -68,11 +71,13 @@ public class OrderView {
     }
 //    插入订单和订单项
     private void insertOrder(){
+        SqlSession session= MybatisUtils.getSqlSession(false);
         //        插入订单数据
         boolean isInsert=orderServer.insertOrder(
                 new Order()
                         .setOrderNumber(orderNumber)
-                        .setPrice(orderPrice)
+                        .setPrice(orderPrice),
+                session
         );
         //建立订单条目成功后插入商品条目
         if (isInsert){
@@ -82,11 +87,16 @@ public class OrderView {
                                 .setOrderNumber(orderNumber)
                                 .setCommodityNumber(orderItem.getCommodityNumber())
                                 .setNumber(orderItem.getNumber())
-                                .setTotalPrice(orderItem.getTotalPrice())
+                                .setTotalPrice(orderItem.getTotalPrice()),
+                        session
                 );
             });
             System.out.println("创建订单成功");
+        }else {
+            session.rollback();
         }
+//        完成操作后提交
+        session.commit();
     }
     private void insertOrderView(){
         inputOrder();
@@ -95,6 +105,7 @@ public class OrderView {
     }
     private void getAllOrderView(){
         int page;
+        SqlSession session=MybatisUtils.getSqlSession(true);
         do {
             clearScan();
             System.out.println("请输入你要查询的页码：");
@@ -109,7 +120,7 @@ public class OrderView {
                 System.out.println("输入页码格式错误");
             }
         }while(true);
-        orderServer.getOrderByPage(page).forEach(o->{
+        orderServer.getOrderByPage(page,session).forEach(o->{
             System.out.println(
                     "订单号"+o.getOrderNumber()+
                             " 价格："+o.getPrice()+
@@ -120,53 +131,59 @@ public class OrderView {
     }
     private void deleteOrderView(){
         clearScan();
+        SqlSession session=MybatisUtils.getSqlSession(true);
         System.out.println("请输入要删除的订单编号：");
         orderNumber=scanner.next();
-        boolean isDelete=orderServer.deleteOrder(orderNumber);
+        boolean isDelete=orderServer.deleteOrder(orderNumber,session);
         if (isDelete){
             System.out.println("删除成功");
         }else {
             System.out.println("删除失败,无对应记录");
+            session.rollback();
         }
     }
     private void deleteOrderItemView(){
         clearScan();
+        SqlSession session=MybatisUtils.getSqlSession(false);
         System.out.println("请输入需要删除的商品编号：");
         String commodityNumber=scanner.next();
-        OrderItem orderItem=orderItemServer.getOrderItemByNumber(commodityNumber,orderNumber);
+        OrderItem orderItem=orderItemServer.getOrderItemByNumber(commodityNumber,orderNumber,session);
 //        若无对应记录，则重新输入
         if (orderItem==null){
             System.out.println("无对应商品记录,请重新输入");
             return;
         }
 //        获取订单总价
-        orderPrice=orderServer.getOrderByNumber(orderNumber).getPrice();
+        orderPrice=orderServer.getOrderByNumber(orderNumber,session).getPrice();
         orderPrice-=orderItem.getTotalPrice();
 //        更新订单
-        orderServer.updateOrder(new Order().setOrderNumber(orderNumber).setPrice(orderPrice));
-        boolean isDelete=orderItemServer.deleteOrderItemByNumber(commodityNumber,orderNumber);
+        orderServer.updateOrder(new Order().setOrderNumber(orderNumber).setPrice(orderPrice),session);
+        boolean isDelete=orderItemServer.deleteOrderItemByNumber(commodityNumber,orderNumber,session);
         if (isDelete){
             System.out.println("删除成功");
         }else {
             System.out.println("删除失败");
+            session.rollback();
         }
-
+//        提交事务
+        session.commit();
     }
     private void updateOrderItemView(){
         clearScan();
+        SqlSession session=MybatisUtils.getSqlSession(false);
         System.out.println("请输入想要更新的商品编号：");
         String commodityNumber=scanner.next();
         System.out.println("请输入想要更新的数量");
         String number=scanner.next();
 //        通过商品和订单编号获取唯一的商品项目
-        OrderItem orderItem=orderItemServer.getOrderItemByNumber(orderNumber,commodityNumber);
+        OrderItem orderItem=orderItemServer.getOrderItemByNumber(orderNumber,commodityNumber,session);
 //        商品项不存在
         if(orderItem==null){
             System.out.println("商品项不存在");
             return;
         }
         //        获取当前商品对应订单信息
-        Order order=orderServer.getOrderByNumber(orderNumber);
+        Order order=orderServer.getOrderByNumber(orderNumber,session);
         //        修改订单总价
         double totalPrice=order.getPrice()-orderItem.getTotalPrice();
 //        商品单价
@@ -179,20 +196,22 @@ public class OrderView {
         totalPrice+=unitPrice*orderItem.getNumber();
         order.setPrice(totalPrice);
 //        更新订单总价
-        orderServer.updateOrder(order);
-        boolean isUpdate=orderItemServer.updateOrderItem(orderItem);
+        orderServer.updateOrder(order,session);
+        boolean isUpdate=orderItemServer.updateOrderItem(orderItem,session);
         if (isUpdate){
             System.out.println("更新成功");
         }else {
             System.out.println("更新失败，找不到商品条项");
         }
+        session.commit();
     }
     private void updateOrderView(){
         clearScan();
         boolean loop=true;
+        SqlSession session=MybatisUtils.getSqlSession(false);
         System.out.println("请输入需要更改的订单编号：");
         orderNumber=scanner.next();
-        if(orderServer.getOrderByNumber(orderNumber)==null){
+        if(orderServer.getOrderByNumber(orderNumber,session)==null){
             System.out.println("无对应订单编号,请重新操作");
             return;
         }

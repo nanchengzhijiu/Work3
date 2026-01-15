@@ -1,6 +1,5 @@
 package Server;
 
-import Util.MybatisUtils;
 import pojo.Commodity;
 import mapper.CommodityMapper;
 import org.apache.ibatis.session.SqlSession;
@@ -8,10 +7,10 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 public class CommodityServer {
-    private SqlSession sqlSession= MybatisUtils.getSqlSession(true);
-    private CommodityMapper commodityMapper=sqlSession.getMapper(CommodityMapper.class);
 
-    public boolean insertCommodity(Commodity commodity){
+
+    public boolean insertCommodity(Commodity commodity,SqlSession session){
+        CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
         try {
             int result=commodityMapper.insertCommodity(commodity);
             return result > 0;
@@ -23,7 +22,8 @@ public class CommodityServer {
         return false;
     }
 
-    public boolean deleteCommodity(String commodityNumber){
+    public boolean deleteCommodity(String commodityNumber,SqlSession session){
+        CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
         try {
             int result= commodityMapper.deleteCommodityByNumber(commodityNumber);
             return result > 0;
@@ -34,11 +34,13 @@ public class CommodityServer {
         }
        return false;
     }
-    public boolean updateCommodity(Commodity commodity){
+    public boolean updateCommodity(Commodity commodity,SqlSession session){
+        CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
         int result=commodityMapper.updateCommodity(commodity);
         return result>0;
     }
-    public List<Commodity> getCommodityByPage(int page){
+    public List<Commodity> getCommodityByPage(int page,SqlSession session){
+        CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
         List<Commodity> commodities=commodityMapper.selectCommodityByPage(5,(page-1)*5);
         if (!commodities.isEmpty()){
             System.out.println("成功查询到商品,共"+commodities.size()+"个商品");
@@ -47,7 +49,8 @@ public class CommodityServer {
         }
         return commodities;
     }
-    public double getCommodityPriceByNumber(String commodityNumber){
+    public double getCommodityPriceByNumber(String commodityNumber,SqlSession session){
+        CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
         try {
             return commodityMapper.selectCommodityPriceByNumber(commodityNumber);
         }catch (Exception e){

@@ -1,25 +1,26 @@
 package Server;
 
-import Util.MybatisUtils;
 import pojo.OrderItem;
 import mapper.OrderItemMapper;
 import org.apache.ibatis.session.SqlSession;
 
 public class OrderItemServer {
-    private SqlSession session= MybatisUtils.getSqlSession(true);
-    private OrderItemMapper OrderItemMapper = session.getMapper(OrderItemMapper.class);
-    public void insertOrderItem(OrderItem orderItem){
+    public void insertOrderItem(OrderItem orderItem,SqlSession session){
+        OrderItemMapper OrderItemMapper = session.getMapper(OrderItemMapper.class);
         OrderItemMapper.insertOrderItem(orderItem);
     }
-    public boolean deleteOrderItemByNumber(String orderNumber,String commodityNumber){
+    public boolean deleteOrderItemByNumber(String orderNumber,String commodityNumber,SqlSession session){
+        OrderItemMapper OrderItemMapper = session.getMapper(OrderItemMapper.class);
         int result=OrderItemMapper.deleteOrderItemByNumber(orderNumber,commodityNumber);
         return result > 0;
     }
-    public boolean updateOrderItem(OrderItem orderItem){
+    public boolean updateOrderItem(OrderItem orderItem,SqlSession session){
+        OrderItemMapper OrderItemMapper = session.getMapper(OrderItemMapper.class);
         int result=OrderItemMapper.updateOrderItem(orderItem);
         return result > 0;
     }
-    public OrderItem getOrderItemByNumber(String orderNumber,String commodityNumber){
+    public OrderItem getOrderItemByNumber(String orderNumber,String commodityNumber,SqlSession session){
+        OrderItemMapper OrderItemMapper = session.getMapper(OrderItemMapper.class);
         return OrderItemMapper.selectItemByNumber(orderNumber,commodityNumber);
     }
 }
