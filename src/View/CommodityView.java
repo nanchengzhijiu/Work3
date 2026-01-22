@@ -16,7 +16,6 @@ public class CommodityView {
     private String commodityNumber;
     private String commodityName;
     private Double commodityPrice;
-    private SqlSession session= MybatisUtils.getSqlSession(true);//自动提交和非批量操作session
     private void clearScan(){
         if (scanner.hasNextLine()) {
             scanner.nextLine(); // 清理可能存在的换行符
@@ -55,6 +54,7 @@ public class CommodityView {
     }
     private void getCommodityView(){
         int page;
+        SqlSession session= MybatisUtils.getSqlSession(true);
         do {
             clearScan();
             System.out.println("请输入你要查询的页码：");
@@ -79,7 +79,7 @@ public class CommodityView {
     private void deleteCommodityView(){
         clearScan();
         getCommodityView();
-
+        SqlSession session= MybatisUtils.getSqlSession(true);
         System.out.println("请输入要删除的商品的编号");
         key=scanner.next();
         boolean isDelete=commodityServer.deleteCommodity(key,session);
@@ -91,6 +91,7 @@ public class CommodityView {
     }
     private void updateCommodityView(){
         clearScan();
+        SqlSession session= MybatisUtils.getSqlSession(true);
 //        为输入编号则一直循环
         do {
             System.out.println("请输入要更改的商品编号(必填)：");
