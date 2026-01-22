@@ -68,7 +68,7 @@ public class OrderView {
                 orderPrice+=totalPrice;
             }
         }while(true);
-        scanner.close();
+        session.close();
     }
 //    插入订单和订单项
     private void insertOrder(){
@@ -150,7 +150,7 @@ public class OrderView {
         SqlSession session=MybatisUtils.getSqlSession(false);
         System.out.println("请输入需要删除的商品编号：");
         String commodityNumber=scanner.next();
-        OrderItem orderItem=orderItemServer.getOrderItemByNumber(commodityNumber,orderNumber,session);
+        OrderItem orderItem=orderItemServer.getOrderItemByNumber(orderNumber,commodityNumber,session);
 //        若无对应记录，则重新输入
         if (orderItem==null){
             System.out.println("无对应商品记录,请重新输入");
@@ -161,7 +161,7 @@ public class OrderView {
         orderPrice-=orderItem.getTotalPrice();
 //        更新订单
         orderServer.updateOrder(new Order().setOrderNumber(orderNumber).setPrice(orderPrice),session);
-        boolean isDelete=orderItemServer.deleteOrderItemByNumber(commodityNumber,orderNumber,session);
+        boolean isDelete=orderItemServer.deleteOrderItemByNumber(orderNumber,commodityNumber,session);
         if (isDelete){
             System.out.println("删除成功");
         }else {
@@ -196,11 +196,6 @@ public class OrderView {
         orderItem.setNumber(Integer.parseInt(number));
 //        设置当前商品项总价
         orderItem.setTotalPrice(unitPrice*orderItem.getNumber());
-//        设置当前订单总价
-        totalPrice+=unitPrice*orderItem.getNumber();
-        order.setPrice(totalPrice);
-//        更新订单总价
-        orderServer.updateOrder(order,session);
         boolean isUpdate=orderItemServer.updateOrderItem(orderItem,session);
         if (isUpdate){
             System.out.println("更新成功");
