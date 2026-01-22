@@ -188,8 +188,6 @@ public class OrderView {
         }
         //        获取当前商品对应订单信息
         Order order=orderServer.getOrderByNumber(orderNumber,session);
-        //        修改订单总价
-        double totalPrice=order.getPrice()-orderItem.getTotalPrice();
 //        商品单价
         double unitPrice=orderItem.getTotalPrice()/orderItem.getNumber();
 //        更新数量
