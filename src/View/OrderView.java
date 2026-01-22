@@ -68,6 +68,7 @@ public class OrderView {
                 orderPrice+=totalPrice;
             }
         }while(true);
+        scanner.close();
     }
 //    插入订单和订单项
     private void insertOrder(){
@@ -129,6 +130,7 @@ public class OrderView {
                             o.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             );
         });
+        session.close();
     }
     private void deleteOrderView(){
         clearScan();
@@ -140,8 +142,8 @@ public class OrderView {
             System.out.println("删除成功");
         }else {
             System.out.println("删除失败,无对应记录");
-            session.rollback();
         }
+        session.close();
     }
     private void deleteOrderItemView(){
         clearScan();
@@ -239,6 +241,7 @@ public class OrderView {
                     break;
             }
         }while (loop);
+        session.close();
     }
     public void orderView(){
         do {

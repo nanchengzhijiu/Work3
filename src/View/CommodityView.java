@@ -75,6 +75,7 @@ public class CommodityView {
                             " 商品名："+commodity.getName()+
                             " 商品单价："+commodity.getPrice());
         });
+        session.close();
     }
     private void deleteCommodityView(){
         clearScan();
@@ -88,6 +89,7 @@ public class CommodityView {
         }else {
             System.out.println("删除失败，商品不存在");
         }
+        session.close();
     }
     private void updateCommodityView(){
         clearScan();
@@ -128,6 +130,7 @@ public class CommodityView {
         }else {
             System.out.println("更新失败,商品不存在");
         }
+        session.close();
     }
     public void commodityView(){
         do {
