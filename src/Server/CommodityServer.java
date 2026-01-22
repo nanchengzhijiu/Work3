@@ -18,6 +18,7 @@ public class CommodityServer {
             if (e.getMessage().contains("commodity_number")){
                 System.out.println("商品编号必须唯一");
             }
+            session.rollback();
         }
         return false;
     }

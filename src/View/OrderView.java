@@ -17,6 +17,7 @@ public class OrderView {
     private OrderServer orderServer=new OrderServer();
     private CommodityServer commodityServer=new CommodityServer();
     private OrderItemServer orderItemServer=new OrderItemServer();
+    private SqlSession session= MybatisUtils.getSqlSession(true);//自动提交和非批量操作session
     private String orderNumber;
     private Double orderPrice=0.0;
 //    订单商品集合
@@ -40,7 +41,6 @@ public class OrderView {
         clearScan();
         String orderInfo;
         String[] info;
-        SqlSession session=MybatisUtils.getSqlSession(true);
         orderItemList.clear();
         orderPrice=0.0;
         //        输入订单商品
@@ -71,6 +71,7 @@ public class OrderView {
     }
 //    插入订单和订单项
     private void insertOrder(){
+//        事务管理
         SqlSession session= MybatisUtils.getSqlSession(false);
         //        插入订单数据
         boolean isInsert=orderServer.insertOrder(
@@ -97,6 +98,7 @@ public class OrderView {
         }
 //        完成操作后提交
         session.commit();
+        session.close();
     }
     private void insertOrderView(){
         inputOrder();
@@ -105,7 +107,6 @@ public class OrderView {
     }
     private void getAllOrderView(){
         int page;
-        SqlSession session=MybatisUtils.getSqlSession(true);
         do {
             clearScan();
             System.out.println("请输入你要查询的页码：");
@@ -131,7 +132,6 @@ public class OrderView {
     }
     private void deleteOrderView(){
         clearScan();
-        SqlSession session=MybatisUtils.getSqlSession(true);
         System.out.println("请输入要删除的订单编号：");
         orderNumber=scanner.next();
         boolean isDelete=orderServer.deleteOrder(orderNumber,session);
@@ -167,6 +167,7 @@ public class OrderView {
         }
 //        提交事务
         session.commit();
+        session.close();
     }
     private void updateOrderItemView(){
         clearScan();
@@ -204,11 +205,11 @@ public class OrderView {
             System.out.println("更新失败，找不到商品条项");
         }
         session.commit();
+        session.close();
     }
     private void updateOrderView(){
         clearScan();
         boolean loop=true;
-        SqlSession session=MybatisUtils.getSqlSession(false);
         System.out.println("请输入需要更改的订单编号：");
         orderNumber=scanner.next();
         if(orderServer.getOrderByNumber(orderNumber,session)==null){
@@ -236,7 +237,6 @@ public class OrderView {
                     break;
             }
         }while (loop);
-
     }
     public void orderView(){
         do {
