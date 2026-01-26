@@ -55,7 +55,7 @@ public class CommodityView {
     private void getCommodityView(){
         int page;
         SqlSession session= MybatisUtils.getSqlSession(true);
-        do {
+        while(true) {
             clearScan();
             System.out.println("请输入你要查询的页码：");
             try {
@@ -68,7 +68,7 @@ public class CommodityView {
             }catch (Exception e){
                 System.out.println("输入页码格式错误");
             }
-        }while(true);
+        }
         commodityServer.getCommodityByPage(page,session).forEach(commodity->{
             System.out.println(
                     "商品编号:"+commodity.getCommodityNumber()+
@@ -134,7 +134,7 @@ public class CommodityView {
         session.close();
     }
     public void commodityView(){
-        do {
+        while(loop) {
             System.out.println("1.增加商品");
             System.out.println("2.删除商品");
             System.out.println("3.更新商品");
@@ -161,6 +161,6 @@ public class CommodityView {
                     System.out.println("输入有误，请重新输入:");
                     break;
             }
-        }while(loop);
+        }
     }
 }

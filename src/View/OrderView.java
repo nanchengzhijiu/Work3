@@ -44,7 +44,7 @@ public class OrderView {
         orderPrice=0.0;
         SqlSession session=MybatisUtils.getSqlSession(true);
         //        输入订单商品
-        do {
+        while(true) {
             System.out.println("请输入订单包含的商品信息,格式为 商品编号 商品数量,输入0结束输入：");
             orderInfo=scanner.nextLine();
             if (orderInfo.equals("0")) {
@@ -67,7 +67,7 @@ public class OrderView {
 //                计算订单总额
                 orderPrice+=totalPrice;
             }
-        }while(true);
+        }
         session.close();
     }
 //    插入订单和订单项
@@ -108,7 +108,7 @@ public class OrderView {
     private void getAllOrderView(){
         int page;
         SqlSession session= MybatisUtils.getSqlSession(true);
-        do {
+        while(true) {
             clearScan();
             System.out.println("请输入你要查询的页码：");
             try {
@@ -121,7 +121,7 @@ public class OrderView {
             }catch (Exception e){
                 System.out.println("输入页码格式错误");
             }
-        }while(true);
+        }
         orderServer.getOrderByPage(page,session).forEach(o->{
             System.out.println(
                     "订单号"+o.getOrderNumber()+
@@ -213,7 +213,7 @@ public class OrderView {
             System.out.println("无对应订单编号,请重新操作");
             return;
         }
-        do {
+        while (loop) {
             System.out.println("请输入对订单列表的操作类型：");
             System.out.println("1.删除相应订单商品项");
             System.out.println("2.更新相应订单商品数量");
@@ -233,11 +233,11 @@ public class OrderView {
                     System.out.println("输入有误，请重新输入");
                     break;
             }
-        }while (loop);
+        }
         session.close();
     }
     public void orderView(){
-        do {
+        while(loop) {
             System.out.println("1.增加订单");
             System.out.println("2.删除订单");
             System.out.println("3.更新订单");
@@ -264,6 +264,6 @@ public class OrderView {
                     System.out.println("输入有误，请重新输入");
                     break;
             }
-        }while(loop);
+        }
     }
 }

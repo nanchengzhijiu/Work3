@@ -7,16 +7,16 @@ public class MainView {
     private boolean loop=true;
     private String key="";
     private void exit(){
-        do {
+        while (!key.equals("y") && !key.equals("n")) {
             System.out.println("你确认要退出吗?y/n");
             key = scanner.next();
-        } while (!key.equals("y") && !key.equals("n"));
+        }
         if(key.equals("y")){
             loop=false;
         }
     }
     public void mainView(){
-        do {
+        while(loop) {
             System.out.println("1.订单操作");
             System.out.println("2.商品操作");
             System.out.println("3.退出系统");
@@ -38,6 +38,6 @@ public class MainView {
                     System.out.println("输入有误，请重新输入");
                     break;
             }
-        }while(loop);
+        }
     }
 }
