@@ -42,4 +42,8 @@ public class OrderServer {
         OrderMapper orderMapper=session.getMapper(OrderMapper.class);
         return orderMapper.selectByOrderNumber(orderNumber);
     }
+    public List<Order> getOrderDetail(String orderNumber,SqlSession session){
+        OrderMapper orderMapper=session.getMapper(OrderMapper.class);
+        return orderMapper.selectOrderDetail(orderNumber);
+    }
 }

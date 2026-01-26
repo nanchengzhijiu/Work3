@@ -107,7 +107,6 @@ public class OrderView {
     }
     private void getAllOrderView(){
         int page;
-
         while(true) {
             clearScan();
             System.out.println("请输入你要查询的页码：");
@@ -130,6 +129,13 @@ public class OrderView {
                                 " 下单时间："+
                                 o.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 );
+            });
+        }
+    }
+    private void getOrderDetailView(){
+        try(SqlSession session=MybatisUtils.getSqlSession(true)){
+            orderServer.getOrderDetail("001",session).forEach(o->{
+                System.out.println(o);
             });
         }
     }
@@ -241,7 +247,8 @@ public class OrderView {
             System.out.println("2.删除订单");
             System.out.println("3.更新订单");
             System.out.println("4.查询订单");
-            System.out.println("5.返回上一级");
+            System.out.println("5.查询订单详情");
+            System.out.println("6.返回上一级");
             key=scanner.next();
             switch (key){
                 case "1":
@@ -257,6 +264,9 @@ public class OrderView {
                     getAllOrderView();
                     break;
                 case "5":
+                    getOrderDetailView();
+                    break;
+                case "6":
                     loop=false;
                     break;
                 default:

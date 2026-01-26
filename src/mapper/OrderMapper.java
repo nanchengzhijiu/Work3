@@ -11,4 +11,5 @@ public interface OrderMapper {
     int deleteOrderByOrderNumber(@Param("orderNumber") String orderNumber);
     List<Order> selectOrderByPage(@Param("pageNumber") int pageNumber,@Param("offect") int offect);
     Order selectByOrderNumber(@Param("orderNumber") String orderNumber);
+    List<Order> selectOrderDetail(String orderNumber);
 }
