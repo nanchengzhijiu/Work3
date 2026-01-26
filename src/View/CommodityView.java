@@ -92,7 +92,7 @@ public class CommodityView {
     }
     private void updateCommodityView(){
         clearScan();
-//        为输入编号则一直循环
+//        未输入编号则一直循环
         do {
             System.out.println("请输入要更改的商品编号(必填)：");
             commodityNumber = scanner.nextLine();

@@ -134,8 +134,12 @@ public class OrderView {
     }
     private void getOrderDetailView(){
         try(SqlSession session=MybatisUtils.getSqlSession(true)){
-            orderServer.getOrderDetail("001",session).forEach(o->{
-                System.out.println(o);
+            System.out.println("请输入订单编号");
+            String orderNumber=scanner.next();
+            orderServer.getOrderDetail(orderNumber,session).forEach(o->{
+                    System.out.print("商品编号："+o.getOrderItem().getCommodityNumber());
+                    System.out.print(" 商品数量："+o.getOrderItem().getNumber());
+                    System.out.println(" 商品总价："+o.getOrderItem().getTotalPrice());
             });
         }
     }

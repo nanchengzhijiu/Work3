@@ -42,6 +42,7 @@ public class CommodityServer {
     }
     public List<Commodity> getCommodityByPage(int page,SqlSession session){
         CommodityMapper commodityMapper=session.getMapper(CommodityMapper.class);
+//        一页返回5个，偏移为(page-1)*5
         List<Commodity> commodities=commodityMapper.selectCommodityByPage(5,(page-1)*5);
         if (!commodities.isEmpty()){
             System.out.println("成功查询到商品,共"+commodities.size()+"个商品");

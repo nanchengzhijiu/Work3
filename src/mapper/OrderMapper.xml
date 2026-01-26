@@ -25,16 +25,17 @@
         select * from orders where order_number=#{orderNumber};
     </select>
     <select id="selectOrderDetail" resultMap="orderDetail">
-        select orders.order_number,price,commodity_number,number from orders left join order_item on orders.order_number=order_item.order_number
+        select orders.order_number,total_price,commodity_number,number from orders left join order_item on orders.order_number=order_item.order_number
                                                          where orders.order_number=#{orderNumber};
     </select>
     <resultMap id="orderDetail" type="Order">
         <id column="id" property="id"/>
         <result column="order_number" property="orderNumber"/>
         <result column="price" property="price"/>
-        <collection property="orderItems" ofType="OrderItem">
+        <collection property="orderItem" ofType="OrderItem">
             <result column="commodity_number" property="commodityNumber"/>
             <result column="number" property="number"/>
+            <result column="total_price" property="totalPrice"/>
         </collection>
     </resultMap>
 </mapper>
