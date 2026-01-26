@@ -23,8 +23,6 @@ public class CommodityView {
     }
     private void insertCommodityView() {
         clearScan();
-//        需要事务管理
-        SqlSession session= MybatisUtils.getSqlSession(false);
         try {
             System.out.println("请输入商品编号：");
             commodityNumber=scanner.next();
@@ -36,25 +34,25 @@ public class CommodityView {
             System.out.println("输入数据有误，返回上一级操作");
             return;
         }
-
-        boolean isInsert= commodityServer.insertCommodity(
-                new Commodity()
-                        .setCommodityNumber(commodityNumber)
-                        .setName(commodityName)
-                        .setPrice(commodityPrice),
-                session
-        );
-        if(isInsert){
-            System.out.println("插入成功");
-        }else {
-            System.out.println("插入失败");
+        //        需要事务管理
+        try(SqlSession session= MybatisUtils.getSqlSession(false)){
+            boolean isInsert= commodityServer.insertCommodity(
+                    new Commodity()
+                            .setCommodityNumber(commodityNumber)
+                            .setName(commodityName)
+                            .setPrice(commodityPrice),
+                    session
+            );
+            if(isInsert){
+                System.out.println("插入成功");
+            }else {
+                System.out.println("插入失败");
+            }
+            session.commit();
         }
-        session.commit();
-        session.close();
     }
     private void getCommodityView(){
         int page;
-        SqlSession session= MybatisUtils.getSqlSession(true);
         while(true) {
             clearScan();
             System.out.println("请输入你要查询的页码：");
@@ -69,31 +67,31 @@ public class CommodityView {
                 System.out.println("输入页码格式错误");
             }
         }
-        commodityServer.getCommodityByPage(page,session).forEach(commodity->{
-            System.out.println(
-                    "商品编号:"+commodity.getCommodityNumber()+
-                            " 商品名："+commodity.getName()+
-                            " 商品单价："+commodity.getPrice());
-        });
-        session.close();
+        try(SqlSession session= MybatisUtils.getSqlSession(true)){
+            commodityServer.getCommodityByPage(page,session).forEach(commodity->{
+                System.out.println(
+                        "商品编号:"+commodity.getCommodityNumber()+
+                                " 商品名："+commodity.getName()+
+                                " 商品单价："+commodity.getPrice());
+            });
+        }
     }
     private void deleteCommodityView(){
         clearScan();
         getCommodityView();
-        SqlSession session= MybatisUtils.getSqlSession(true);
         System.out.println("请输入要删除的商品的编号");
         key=scanner.next();
-        boolean isDelete=commodityServer.deleteCommodity(key,session);
-        if (isDelete) {
-            System.out.println("删除成功");
-        }else {
-            System.out.println("删除失败，商品不存在");
+        try(SqlSession session= MybatisUtils.getSqlSession(true)){
+            boolean isDelete=commodityServer.deleteCommodity(key,session);
+            if (isDelete) {
+                System.out.println("删除成功");
+            }else {
+                System.out.println("删除失败，商品不存在");
+            }
         }
-        session.close();
     }
     private void updateCommodityView(){
         clearScan();
-        SqlSession session= MybatisUtils.getSqlSession(true);
 //        为输入编号则一直循环
         do {
             System.out.println("请输入要更改的商品编号(必填)：");
@@ -125,13 +123,14 @@ public class CommodityView {
         if (commodityPrice != null) {
             commodity.setPrice(commodityPrice);
         }
-        boolean isUpdate=commodityServer.updateCommodity(commodity,session);
-        if (isUpdate){
-            System.out.println("更新成功");
-        }else {
-            System.out.println("更新失败,商品不存在");
+        try(SqlSession session= MybatisUtils.getSqlSession(true)){
+            boolean isUpdate=commodityServer.updateCommodity(commodity,session);
+            if (isUpdate){
+                System.out.println("更新成功");
+            }else {
+                System.out.println("更新失败,商品不存在");
+            }
         }
-        session.close();
     }
     public void commodityView(){
         while(loop) {
