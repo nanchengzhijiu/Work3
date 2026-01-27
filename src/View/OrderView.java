@@ -90,7 +90,6 @@ public class OrderView {
                         session
                 );
             });
-            System.out.println("创建订单成功");
         }else {
             session.rollback();
         }
