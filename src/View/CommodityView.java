@@ -96,21 +96,21 @@ public class CommodityView {
             System.out.println("请输入要更改的商品编号(必填)：");
             commodityNumber = scanner.nextLine();
         } while (commodityNumber.isEmpty());
-        System.out.println("请输入商品名,不输入输入则不变：");
+        System.out.println("请输入商品名:");
         commodityName=scanner.nextLine();
-        System.out.println("请输入商品定价,不输入则不变：");
+        System.out.println("请输入商品定价:");
         String priceInput = scanner.nextLine();
 
         if (priceInput!=null && !priceInput.isEmpty()) {
             try {
                 commodityPrice=Double.parseDouble(priceInput);
                 if (commodityPrice < 0) {
-                    System.out.println("价格不能为负数，将跳过价格更新");
+                    System.out.println("价格不能为负数");
                     commodityPrice = null;
                     return;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("价格格式错误，将跳过价格更新");
+                System.out.println("价格格式错误");
                 commodityPrice = null;
                 return;
             }
@@ -121,7 +121,6 @@ public class CommodityView {
         if (!commodityName.isEmpty()) {
             commodity.setName(commodityName);
         }
-        System.out.println(commodityPrice);
         if (commodityPrice != null) {
             commodity.setPrice(commodityPrice);
         }
