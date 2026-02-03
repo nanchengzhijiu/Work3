@@ -78,15 +78,14 @@ public class CommodityView {
     }
     private void deleteCommodityView(){
         clearScan();
-        getCommodityView();
         System.out.println("请输入要删除的商品的编号");
-        key=scanner.next();
+        key=scanner.nextLine();
         try(SqlSession session= MybatisUtils.getSqlSession(true)){
             boolean isDelete=commodityServer.deleteCommodity(key,session);
             if (isDelete) {
                 System.out.println("删除成功");
             }else {
-                System.out.println("删除失败，商品不存在");
+                System.out.println("删除失败");
             }
         }
     }
@@ -108,18 +107,21 @@ public class CommodityView {
                 if (commodityPrice < 0) {
                     System.out.println("价格不能为负数，将跳过价格更新");
                     commodityPrice = null;
+                    return;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("价格格式错误，将跳过价格更新");
                 commodityPrice = null;
+                return;
             }
-            return;
+
         }
         Commodity commodity = new Commodity()
                 .setCommodityNumber(commodityNumber);
         if (!commodityName.isEmpty()) {
             commodity.setName(commodityName);
         }
+        System.out.println(commodityPrice);
         if (commodityPrice != null) {
             commodity.setPrice(commodityPrice);
         }
