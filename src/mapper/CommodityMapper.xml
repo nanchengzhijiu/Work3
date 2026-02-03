@@ -12,6 +12,7 @@
     <update id="updateCommodity">
         update commodity
         <set>
+            update_time = now(),
             <if test="name != null and name != ''">
                 name = #{name},
             </if>

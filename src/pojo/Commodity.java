@@ -9,5 +9,5 @@ public class Commodity {
     int id;
     String commodityNumber;
     String name;
-    double price;
+    Double price;
 }

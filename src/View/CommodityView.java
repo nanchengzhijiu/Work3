@@ -116,14 +116,13 @@ public class CommodityView {
             }
 
         }
+
         Commodity commodity = new Commodity()
                 .setCommodityNumber(commodityNumber);
         if (!commodityName.isEmpty()) {
             commodity.setName(commodityName);
         }
-        if (commodityPrice != null) {
-            commodity.setPrice(commodityPrice);
-        }
+        commodity.setPrice(commodityPrice);
         try(SqlSession session= MybatisUtils.getSqlSession(true)){
             boolean isUpdate=commodityServer.updateCommodity(commodity,session);
             if (isUpdate){
